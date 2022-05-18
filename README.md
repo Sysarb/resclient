@@ -21,12 +21,12 @@ Visit [Resgate.io](https://resgate.io) for more information.
 
 With npm:
 ```sh
-npm install resclient
+npm install @sysarb/resclient
 ```
 
 With yarn:
 ```sh
-yarn add resclient
+yarn add @sysarb/resclient
 ```
 
 ## Example usage
