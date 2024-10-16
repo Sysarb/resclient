@@ -638,6 +638,9 @@ class ResClient {
 		for (rid in ind) {
 			let d = ind[rid];
 			let ci = this.cache[rid];
+			if (!ci) {
+				continue;
+			}
 			ci.addIndirect(d);
 			if (d < 0) {
 				this._tryDelete(ci);
