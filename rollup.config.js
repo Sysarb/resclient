@@ -1,6 +1,5 @@
 import babel from '@rollup/plugin-babel';
 import resolve from '@rollup/plugin-node-resolve';
-import { terser } from 'rollup-plugin-terser';
 
 export default {
 	input: 'src/index.js',
@@ -12,6 +11,5 @@ export default {
 	plugins: [
 		babel({ babelHelpers: 'bundled' }),
 		resolve(),
-		(process.env.NODE_ENV === 'production' && terser()),
 	],
 };

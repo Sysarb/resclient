@@ -1,4 +1,4 @@
-import { obj } from 'modapp-utils';
+import { obj } from './obj';
 import equal from './equal';
 
 /**
