@@ -137,26 +137,26 @@ describe("ResClient", () => {
 	};
 
 	function flushPromises(depth = 2) {
-		return new Promise(resolve => setImmediate(() => {
+		return new Promise(resolve => setTimeout(() => {
 			depth--;
 			if (depth) {
 				flushPromises(depth).then(resolve);
 			} else {
 				resolve();
 			}
-		}));
+		}, 0));
 	}
 
 	function flushRequests(depth = 2, time = 10) {
 		jest.advanceTimersByTime(time);
-		return new Promise(resolve => setImmediate(() => {
+		return new Promise(resolve => setTimeout(() => {
 			depth--;
 			if (depth) {
 				flushRequests(depth).then(resolve);
 			} else {
 				resolve();
 			}
-		}));
+		}, 0));
 	}
 
 	function waitAWhile(time = 10000) {

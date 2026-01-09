@@ -1,4 +1,4 @@
-import { obj } from './obj';
+import * as obj from './obj';
 
 /**
  * Add event data

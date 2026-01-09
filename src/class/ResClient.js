@@ -1,6 +1,6 @@
 
 import eventBus from './EventBus';
-import { obj } from './obj';
+import * as obj from './obj';
 import CacheItem from './CacheItem';
 import TypeList from './TypeList';
 import ResCollection from './ResCollection';
@@ -103,6 +103,8 @@ class ResClient {
 	 * @param {bool} [opt.subscribeRetryDelay] Milliseconds between subscribe attempts on a stale resource after a failed stale subscribe. Zero means no retries. Defaults to 10000.
 	 * @param {bool} [opt.unsubscribeDelay] Milliseconds between stopping listening to a resource, and the resource being unsubscribed. Defaults to 5000.
 	 * @param {bool} [opt.debug] Flag to debug log all WebSocket communication. Defaults to false.
+	 * @param {(function)} [opt.onBeforeTrace] Callback called before sending a request. The request object is passed as parameter. The return value is stored and passed to onAfterTrace.
+	 * @param {function} [opt.onAfterTrace] Callback called after receiving a response. The first parameter is a boolean indicating if the request was successful, and the second parameter is the response object. The tracing value returned from onBeforeTrace is available in the response object.
 	 * @param {module:modapp~EventBus} [opt.eventBus] Event bus.
 	 */
 	constructor(hostUrlOrFactory, opt) {
@@ -121,7 +123,9 @@ class ResClient {
 			subscribeRetryDelay: { type: 'number', default: defaultSubscribeRetryDelay },
 			unsubscribeDelay: { type: 'number', default: defaultUnsubscribeDelay },
 			debug: { type: 'boolean', default: false },
-			eventBus: { type: 'object', default: eventBus }
+			eventBus: { type: 'object', default: eventBus },
+			onBeforeTrace: { type: '?function' },
+			onAfterTrace: { type: '?function' }
 		});
 
 		this.tryConnect = false;
@@ -456,14 +460,23 @@ class ResClient {
 
 	_sendNow(method, params) {
 		return new Promise((resolve, reject) => {
+			const id = this.reqId++;
+			const tracing = this.onBeforeTrace ? this.onBeforeTrace(id) : undefined;
+
 			// Prepare request object
-			var req = { id: this.reqId++, method: method, params: params || undefined };
+			var req = {
+				id: id,
+				method: method,
+				params: params || undefined,
+				tracing: tracing
+			};
 
 			this.requests[req.id] = {
 				method: method,
 				params: req.params,
 				resolve: resolve,
-				reject: reject
+				reject: reject,
+				tracing: tracing
 			};
 
 			var json = JSON.stringify(req);
@@ -494,6 +507,10 @@ class ResClient {
 			}
 
 			delete this.requests[data.id];
+
+			if (this.onAfterTrace) {
+				this.onAfterTrace(!data.hasOwnProperty("error"), data.id);
+			}
 
 			if (data.hasOwnProperty("error")) {
 				this._handleErrorResponse(req, data);

@@ -41,21 +41,25 @@ declare class ResClient {
      * @param {object} [opt] Optional parameters.
      * @param {function} [opt.onConnect] On connect callback called prior resolving the connect promise and subscribing to stale resources. May return a promise.
      * @param {string} [opt.namespace] Event bus namespace. Defaults to 'resclient'.
-     * @param {bool} [opt.reconnectDelay] Milliseconds between WebSocket reconnect attempts. Defaults to 3000.
-     * @param {bool} [opt.subscribeStaleDelay] Milliseconds until a subscribe attempt is made on a stale resource. Zero means no attempt to subscribe. Defaults to 2000.
-     * @param {bool} [opt.subscribeRetryDelay] Milliseconds between subscribe attempts on a stale resource after a failed stale subscribe. Zero means no retries. Defaults to 10000.
-     * @param {bool} [opt.unsubscribeDelay] Milliseconds between stopping listening to a resource, and the resource being unsubscribed. Defaults to 5000.
-     * @param {bool} [opt.debug] Flag to debug log all WebSocket communication. Defaults to false.
+     * @param {number} [opt.reconnectDelay] Milliseconds between WebSocket reconnect attempts. Defaults to 3000.
+     * @param {number} [opt.subscribeStaleDelay] Milliseconds until a subscribe attempt is made on a stale resource. Zero means no attempt to subscribe. Defaults to 2000.
+     * @param {number} [opt.subscribeRetryDelay] Milliseconds between subscribe attempts on a stale resource after a failed stale subscribe. Zero means no retries. Defaults to 10000.
+     * @param {number} [opt.unsubscribeDelay] Milliseconds between stopping listening to a resource, and the resource being unsubscribed. Defaults to 5000.
+     * @param {boolean} [opt.debug] Flag to debug log all WebSocket communication. Defaults to false.
+     * @param {(id: number) => any} [opt.onBeforeTrace] Callback called before sending a request. The request object is passed as parameter. The return value is stored and passed to onAfterTrace.
+     * @param {(success: boolean, id: number) => void} [opt.onAfterTrace] Callback called after receiving a response. The first parameter is a boolean indicating if the request was successful, and the second parameter is the response object. The tracing value returned from onBeforeTrace is available in the response object.
      * @param {module:modapp~EventBus} [opt.eventBus] Event bus.
      */
     constructor(hostUrlOrFactory: any, opt?: {
         onConnect?: Function;
         namespace?: string;
-        reconnectDelay?: bool;
-        subscribeStaleDelay?: bool;
-        subscribeRetryDelay?: bool;
-        unsubscribeDelay?: bool;
-        debug?: bool;
+        reconnectDelay?: number;
+        subscribeStaleDelay?: number;
+        subscribeRetryDelay?: number;
+        unsubscribeDelay?: number;
+        debug?: boolean;
+        onBeforeTrace?: (id: number) => any;
+        onAfterTrace?: (success: boolean, id: number) => void;
         eventBus?: any;
     });
     hostUrl: any;

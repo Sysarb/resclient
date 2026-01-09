@@ -44,7 +44,7 @@ export type ResCollection = {
  * ResCollection represents a collection provided over the RES API.
  * @implements {module:modapp~Collection}
  */
-declare class ResCollection<T = unknown> implements module {
+declare class ResCollection implements module {
     /**
      * Creates an ResCollection instance
      * @param {ResClient} api ResClient instance
@@ -59,7 +59,7 @@ declare class ResCollection<T = unknown> implements module {
     _rid: string;
     _idCallback: Function;
     _map: {};
-    _list: T[];
+    _list: any[];
     /**
      * ResClient instance.
      * @returns {ResClient} ResClient instance
@@ -77,7 +77,7 @@ declare class ResCollection<T = unknown> implements module {
     /**
      * Internal collection array. Do not mutate directly.
      */
-    get list(): T[];
+    get list(): any[];
     /**
      * Attach a collection event handler function for one or more events.
      * If no event or handler is provided, the collection will still be considered listened to,
@@ -102,19 +102,19 @@ declare class ResCollection<T = unknown> implements module {
      * @param {string} id Id of the item
      * @returns {*} Item with the id. Undefined if key doesn't exist
      */
-    get(id: string): T | undefined;
+    get(id: string): any;
     /**
      * Retrieves the order index of an item.
      * @param {*} item Item to find
      * @returns {number} Order index of the first matching item. -1 if the item doesn't exist.
      */
-    indexOf(item: T): number;
+    indexOf(item: any): number;
     /**
      * Gets an item from the collection by index position
      * @param {number} idx  Index of the item
      * @returns {*} Item at the given index. Undefined if the index is out of bounds.
      */
-    atIndex(idx: number): T | undefined;
+    atIndex(idx: number): any;
     /**
      * Calls a method on the collection.
      * @param {string} method Method name
@@ -133,7 +133,7 @@ declare class ResCollection<T = unknown> implements module {
      * Returns a shallow clone of the internal array.
      * @returns {Array.<*>} Clone of internal array
      */
-    toArray(): Array<T>;
+    toArray(): Array<any>;
     /**
      * Initializes the collection with a data array.
      * Should only be called by the ResClient instance.
@@ -161,7 +161,7 @@ declare class ResCollection<T = unknown> implements module {
     toJSON(): any[];
     [Symbol.iterator](): {
         next: () => {
-            value: T;
+            value: any;
             done: boolean;
         };
     };

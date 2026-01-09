@@ -7,11 +7,11 @@
 <dt><a href="#ResCollection">ResCollection</a></dt>
 <dd><p>ResCollection represents a collection provided over the RES API.</p>
 </dd>
-<dt><a href="#ResError">ResError</a></dt>
-<dd><p>ResError represents a RES API error.</p>
-</dd>
 <dt><a href="#ResModel">ResModel</a></dt>
 <dd><p>ResModel represents a model provided over the RES API.</p>
+</dd>
+<dt><a href="#ResError">ResError</a></dt>
+<dd><p>ResError represents a RES API error.</p>
 </dd>
 </dl>
 
@@ -75,6 +75,8 @@ Creates a ResClient instance
 | [opt.subscribeRetryDelay] | <code>bool</code> | Milliseconds between subscribe attempts on a stale resource after a failed stale subscribe. Zero means no retries. Defaults to 10000. |
 | [opt.unsubscribeDelay] | <code>bool</code> | Milliseconds between stopping listening to a resource, and the resource being unsubscribed. Defaults to 5000. |
 | [opt.debug] | <code>bool</code> | Flag to debug log all WebSocket communication. Defaults to false. |
+| [opt.onBeforeTrace] | <code>function</code> | Callback called before sending a request. The request object is passed as parameter. The return value is stored and passed to onAfterTrace. |
+| [opt.onAfterTrace] | <code>function</code> | Callback called after receiving a response. The first parameter is a boolean indicating if the request was successful, and the second parameter is the response object. The tracing value returned from onBeforeTrace is available in the response object. |
 | [opt.eventBus] | <code>module:modapp~EventBus</code> | Event bus. |
 
 <a name="ResClient+supportedProtocol"></a>
@@ -565,44 +567,6 @@ Remove event emitted on any item being added to the collection.
 | event | <code>string</code> | Event name including namespace. |
 | action | <code>string</code> | Event action. |
 
-<a name="ResError"></a>
-
-## ResError
-ResError represents a RES API error.
-
-**Kind**: global class  
-
-* [ResError](#ResError)
-    * [.code](#ResError+code) : <code>string</code>
-    * [.message](#ResError+message) : <code>string</code>
-    * [.data](#ResError+data) : <code>\*</code>
-    * [.getResourceId()](#ResError+getResourceId) ⇒ <code>string</code>
-
-<a name="ResError+code"></a>
-
-### resError.code : <code>string</code>
-Error code
-
-**Kind**: instance property of [<code>ResError</code>](#ResError)  
-<a name="ResError+message"></a>
-
-### resError.message : <code>string</code>
-Error message
-
-**Kind**: instance property of [<code>ResError</code>](#ResError)  
-<a name="ResError+data"></a>
-
-### resError.data : <code>\*</code>
-Error data object
-
-**Kind**: instance property of [<code>ResError</code>](#ResError)  
-<a name="ResError+getResourceId"></a>
-
-### resError.getResourceId() ⇒ <code>string</code>
-Error resource ID
-
-**Kind**: instance method of [<code>ResError</code>](#ResError)  
-**Returns**: <code>string</code> - Resource ID  
 <a name="ResModel"></a>
 
 ## ResModel
@@ -739,6 +703,44 @@ Change event emitted on any change to one or more public (non-underscore) proper
 | event | <code>string</code> | Event name including namespace. |
 | action | <code>string</code> | Event action. |
 
+<a name="ResError"></a>
+
+## ResError
+ResError represents a RES API error.
+
+**Kind**: global class  
+
+* [ResError](#ResError)
+    * [.code](#ResError+code) : <code>string</code>
+    * [.message](#ResError+message) : <code>string</code>
+    * [.data](#ResError+data) : <code>\*</code>
+    * [.getResourceId()](#ResError+getResourceId) ⇒ <code>string</code>
+
+<a name="ResError+code"></a>
+
+### resError.code : <code>string</code>
+Error code
+
+**Kind**: instance property of [<code>ResError</code>](#ResError)  
+<a name="ResError+message"></a>
+
+### resError.message : <code>string</code>
+Error message
+
+**Kind**: instance property of [<code>ResError</code>](#ResError)  
+<a name="ResError+data"></a>
+
+### resError.data : <code>\*</code>
+Error data object
+
+**Kind**: instance property of [<code>ResError</code>](#ResError)  
+<a name="ResError+getResourceId"></a>
+
+### resError.getResourceId() ⇒ <code>string</code>
+Error resource ID
+
+**Kind**: instance method of [<code>ResError</code>](#ResError)  
+**Returns**: <code>string</code> - Resource ID  
 <a name="eventCallback"></a>
 
 ## eventCallback : <code>function</code>
